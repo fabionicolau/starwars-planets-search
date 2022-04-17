@@ -9,6 +9,12 @@ function MyProvider({ children }) {
   const [filterByName, setFilterByName] = useState({
     name: '',
   });
+  const [filterByNumericValues, setFilterByNumericValues] = useState([]);
+  const [objectWithInputValues, setObjectWithInputValues] = useState({
+    column: 'population',
+    comparison: 'maior que',
+    value: 0,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +27,15 @@ function MyProvider({ children }) {
   }, []);
 
   const context = {
-    planets, loading, setPlanets, filterByName, setFilterByName,
+    planets,
+    loading,
+    setPlanets,
+    filterByName,
+    setFilterByName,
+    filterByNumericValues,
+    setFilterByNumericValues,
+    setObjectWithInputValues,
+    objectWithInputValues,
   };
 
   return (
