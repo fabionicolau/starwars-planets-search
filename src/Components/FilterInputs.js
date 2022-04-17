@@ -51,10 +51,21 @@ const FilterInputs = () => {
     setFilterByNumericValues((prev) => [...prev, objectWithInputValues]);
   };
 
+  const filterColumnsBySelect = () => {
+    const selectedColumns = filterByNumericValues.map((filter) => filter.column);
+    const filteredColumns = COLUMNS
+      .filter((element) => !selectedColumns.includes(element));
+    return filteredColumns;
+  };
+
   const deleteButton = (indexParam) => {
     const filter = filterByNumericValues
       .filter((_element, index) => index !== indexParam);
     setFilterByNumericValues(filter);
+  };
+
+  const deleteFilters = () => {
+    setFilterByNumericValues([]);
   };
 
   return (
@@ -70,13 +81,14 @@ const FilterInputs = () => {
       <select
         data-testid="column-filter"
         name="column"
-        onChange={ handleInputChange }
+        onClick={ handleInputChange }
       >
-        {COLUMNS.map((column, index) => (
-          <option key={ index } value={ column }>
-            { column }
-          </option>
-        ))}
+        {filterColumnsBySelect()
+          .map((column, index) => (
+            <option key={ index } value={ column }>
+              { column }
+            </option>
+          ))}
       </select>
 
       <select
@@ -89,6 +101,7 @@ const FilterInputs = () => {
             { comparison }
           </option>))}
       </select>
+
       <input
         data-testid="value-filter"
         type="number"
@@ -96,6 +109,7 @@ const FilterInputs = () => {
         value={ objectWithInputValues.value }
         onChange={ handleInputChange }
       />
+
       <button
         data-testid="button-filter"
         type="submit"
@@ -104,12 +118,29 @@ const FilterInputs = () => {
         FILTRAR
 
       </button>
+
+      <button
+        data-testid="button-remove-filters"
+        type="submit"
+        onClick={ deleteFilters }
+      >
+        REMOVER FILTROS
+
+      </button>
       {filterByNumericValues.map((element, index) => (
         <div key={ index }>
           <p>{element.value}</p>
           <p>{element.column}</p>
           <p>{element.comparison}</p>
-          <button type="button" onClick={ () => deleteButton(index) }>Excluir</button>
+
+          <button
+            data-testid="filter"
+            type="button"
+            onClick={ () => deleteButton(index) }
+          >
+            Excluir
+
+          </button>
         </div>
       ))}
     </div>
