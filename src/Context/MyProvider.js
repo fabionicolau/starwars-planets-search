@@ -38,10 +38,13 @@ function MyProvider({ children }) {
   const sortedPlanets = () => {
     const { column, sort } = order;
     if (sort === 'ASC') {
-      return data.sort((a, b) => a[column] - b[column]);
-    }
-    if (sort === 'DESC') {
-      return data.sort((a, b) => b[column] - a[column]);
+      return data
+        .sort((a, b) => a[column].localeCompare(b[column]))
+        .sort((a, b) => +a[column] - +b[column]);
+    } if (sort === 'DESC') {
+      return data
+        .sort((a, b) => a[column].localeCompare(b[column]))
+        .sort((a, b) => +b[column] - +a[column]);
     }
   };
 

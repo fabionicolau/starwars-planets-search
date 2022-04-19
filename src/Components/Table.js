@@ -45,7 +45,7 @@ const Table = () => {
             <th> Films </th>
             <th> Created </th>
             <th> Edited </th>
-            <th> url </th>
+            <th> URL </th>
           </tr>
         </thead>
         <tbody>

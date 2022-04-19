@@ -57,7 +57,7 @@ const SortInputs = () => {
       <select
         data-testid="column-sort"
         name="column"
-        onClick={ handleInputRadios }
+        onChange={ handleInputRadios }
       >
         {COLUMNS
           .map((columns, index) => (
