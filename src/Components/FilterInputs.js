@@ -13,38 +13,17 @@ const COMPARISONS = ['maior que', 'igual a', 'menor que'];
 
 const FilterInputs = () => {
   const {
-    setFilterByName,
-    filterByName: { name },
-    setFilterByNumericValues,
     filterByNumericValues,
+    setFilterByNumericValues,
     objectWithInputValues,
     setObjectWithInputValues,
   } = useContext(MyContext);
 
-  const handleInputChange = ({ target: { value: values, name: names } }) => {
-    if (names === 'name') {
-      setFilterByName({
-        name: values,
-      });
-    }
-    if (names === 'column') {
-      setObjectWithInputValues({
-        ...objectWithInputValues,
-        column: values,
-      });
-    }
-    if (names === 'comparison') {
-      setObjectWithInputValues({
-        ...objectWithInputValues,
-        comparison: values,
-      });
-    }
-    if (names === 'value') {
-      setObjectWithInputValues({
-        ...objectWithInputValues,
-        value: values,
-      });
-    }
+  const handleInputOptions = ({ target }) => {
+    setObjectWithInputValues({
+      ...objectWithInputValues,
+      [target.name]: target.value,
+    });
   };
 
   const handleFilterButton = () => {
@@ -58,30 +37,22 @@ const FilterInputs = () => {
     return filteredColumns;
   };
 
-  const deleteButton = (indexParam) => {
+  const deleteFilterButton = (indexParam) => {
     const filter = filterByNumericValues
       .filter((_element, index) => index !== indexParam);
-    setFilterByNumericValues(filter);
+    setFilterByNumericValues([...filter]);
   };
 
-  const deleteFilters = () => {
+  const deleteAllFilters = () => {
     setFilterByNumericValues([]);
   };
 
   return (
     <div>
-      <input
-        data-testid="name-filter"
-        type="text"
-        name="name"
-        value={ name }
-        onChange={ handleInputChange }
-      />
-
       <select
         data-testid="column-filter"
         name="column"
-        onClick={ handleInputChange }
+        onChange={ handleInputOptions }
       >
         {filterColumnsBySelect()
           .map((column, index) => (
@@ -94,12 +65,13 @@ const FilterInputs = () => {
       <select
         data-testid="comparison-filter"
         name="comparison"
-        onChange={ handleInputChange }
+        onChange={ handleInputOptions }
       >
         {COMPARISONS.map((comparison, index) => (
           <option key={ index } value={ comparison }>
             { comparison }
           </option>))}
+
       </select>
 
       <input
@@ -107,12 +79,12 @@ const FilterInputs = () => {
         type="number"
         name="value"
         value={ objectWithInputValues.value }
-        onChange={ handleInputChange }
+        onChange={ handleInputOptions }
       />
 
       <button
         data-testid="button-filter"
-        type="submit"
+        type="button"
         onClick={ handleFilterButton }
       >
         FILTRAR
@@ -121,24 +93,20 @@ const FilterInputs = () => {
 
       <button
         data-testid="button-remove-filters"
-        type="submit"
-        onClick={ deleteFilters }
+        type="button"
+        onClick={ deleteAllFilters }
       >
         REMOVER FILTROS
 
       </button>
       {filterByNumericValues.map((element, index) => (
-        <div key={ index }>
-          <p>{element.value}</p>
-          <p>{element.column}</p>
-          <p>{element.comparison}</p>
-
+        <div key={ index } data-testid="filter">
+          <p>{`${element.column} ${element.comparison} ${element.value}`}</p>
           <button
-            data-testid="filter"
             type="button"
-            onClick={ () => deleteButton(index) }
+            onClick={ () => deleteFilterButton(index) }
           >
-            Excluir
+            X
 
           </button>
         </div>

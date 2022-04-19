@@ -4,8 +4,7 @@ import MyContext from './MyContext';
 import fetchAPI from '../services/FetchApi';
 
 function MyProvider({ children }) {
-  const [planets, setPlanets] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
   const [filterByName, setFilterByName] = useState({
     name: '',
   });
@@ -15,27 +14,53 @@ function MyProvider({ children }) {
     comparison: 'maior que',
     value: 0,
   });
+  const [order, setOrder] = useState({});
+  const [objectWithOrders, setObjectWithOrders] = useState({
+    column: 'population',
+    sort: 'ASC',
+  });
+  const [isSorted, setIsSorted] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      const data = await fetchAPI();
-      setPlanets(data);
-      setLoading(false);
+      const datas = await fetchAPI();
+      const minus = -1;
+      const plus = 1;
+      const sortedData = datas.sort((a, b) => {
+        const compareNames = a.name < b.name;
+        return compareNames ? minus : plus;
+      });
+      setData(sortedData);
     };
     fetchData();
   }, []);
 
+  const sortedPlanets = () => {
+    const { column, sort } = order;
+    if (sort === 'ASC') {
+      return data.sort((a, b) => a[column] - b[column]);
+    }
+    if (sort === 'DESC') {
+      return data.sort((a, b) => b[column] - a[column]);
+    }
+  };
+
   const context = {
-    planets,
-    loading,
-    setPlanets,
-    filterByName,
-    setFilterByName,
-    filterByNumericValues,
-    setFilterByNumericValues,
     setObjectWithInputValues,
+    setObjectWithOrders,
+    setData,
+    setFilterByName,
+    setFilterByNumericValues,
+    setOrder,
+    setIsSorted,
+    filterByName,
+    filterByNumericValues,
+    data,
     objectWithInputValues,
+    objectWithOrders,
+    order,
+    isSorted,
+    sortedPlanets,
   };
 
   return (
