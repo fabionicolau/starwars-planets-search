@@ -12,7 +12,9 @@
 
 <ul>
   <li>React</li>
-  <li>JavaScript</li>
+  <li>React Router</li>
+  <li>Context API</li>
+  <li>Hooks</li>
 </ul>
 
 <h1>Nota</h1>
